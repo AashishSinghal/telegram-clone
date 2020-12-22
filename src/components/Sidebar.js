@@ -13,26 +13,29 @@ import db, { auth } from "../firebase";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 
-
 const Sidebar = () => {
   const user = useSelector(selectUser);
-  const [threads, setThreads] = useState([])
+  const [threads, setThreads] = useState([]);
 
   useEffect(() => {
-    db.collection('threads').onSnapshot((snapshot) => setThreads(snapshot.docs.map((doc) => ({
-      id: doc.id,
-      data: doc.data(),
-    }))))
-  }, [])
+    db.collection("threads").onSnapshot((snapshot) =>
+      setThreads(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }))
+      )
+    );
+  }, []);
 
   const addThread = () => {
     const threadName = prompt("Enter a thread name.");
-    if(threadName) {
-      db.collection('threads').add({
-        threadName: threadName
-      })
+    if (threadName) {
+      db.collection("threads").add({
+        threadName: threadName,
+      });
     }
-  }
+  };
 
   return (
     <div className="sidebar">
@@ -46,8 +49,8 @@ const Sidebar = () => {
         </IconButton>
       </div>
       <div className="sidebar__threads">
-        {threads.map(({id, data: {threadName}}) => (
-          <SidebarThreads key={id} id={id} threadName={threadName}/>
+        {threads.map(({ id, data: { threadName } }) => (
+          <SidebarThreads key={id} id={id} threadName={threadName} />
         ))}
       </div>
       <div className="sidebar__bottom">
